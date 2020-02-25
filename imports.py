@@ -19,6 +19,7 @@ from sklearn.model_selection import GridSearchCV
 import lightgbm.sklearn as lgb
 
 from scipy.stats import zscore
+from scipy.cluster import hierarchy as hc
 
 def display_all(df):
     with pd.option_context("display.max_rows", 1000, "display.max_columns", 1000): 
@@ -32,23 +33,12 @@ class LabelValueTransformer(TransformerMixin):
              if auto the transformer transforms all categorical
              columns.
     """
-    def __init__(self, columns='auto'):
+    def __init__(self, columns='auto', custom_dicts=[]):
 
         self.columns = columns
+        self.customs = custom_dicts
+        
         self.labels = {}
-        
-        # Custom labels
-        lab_dict1 = {'Ex': 6, 'Gd': 5, 'TA': 4,
-                     'Fa': 3, 'Po': 2, 'NA': 1}
-        lab_dict2 = {'Y': 2, 'N': 1}
-        lab_dict3 = {'Typ': 8, 'Min1': 7, 'Min2': 6, 'Mod': 5,
-                     'Maj1': 4, 'Maj2': 3, 'Sev': 2, 'Sal': 1}
-        lab_dict4 = {'Pave': 2,'Grvl': 1}
-        lab_dict5 = {'Gd': 4, 'Av': 3, 'Mn': 2, 'No': 1}
-        lab_dict6 = {'GdPrv': 4, 'MnPrv': 3, 'GdWo': 2, 'MnWw': 1}
-        
-        self.customs = [lab_dict1, lab_dict2, lab_dict3,
-                        lab_dict4, lab_dict5, lab_dict6]
         
         
     def _get_cats(self, X):
